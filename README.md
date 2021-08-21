@@ -1,3 +1,8 @@
+# MERNG Stacked 
+
+This project was created in order to understand the MERNG stack.
+MongoDB (Atlas), Express, React, Node.js, GraphQL (Apollo)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
