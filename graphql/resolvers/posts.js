@@ -33,7 +33,6 @@ module.exports = {
     },
     // These are the mutation functions that can be used for posts
     Mutation: {
-
         // This function allows users to create a post with authentication
         async createPost(_, { body }, context) {
         const user = checkAuth(context);
@@ -46,6 +45,11 @@ module.exports = {
         });
 
         const post = await newPost.save();
+
+        context.pubsub.publish('NEW_POST', {
+            newPost: post
+        });
+
         return post;
         },
         
@@ -65,7 +69,7 @@ module.exports = {
                 throw new Error(err);
             }
         },
-
+        // This function allows users to like or unlike a post
         async likePost(_, { postId }, context) {
             const { username } = checkAuth(context);
             
@@ -84,6 +88,12 @@ module.exports = {
             } else {
                 throw new UserInputError('Post not found.');
             }
+        }
+    },
+    // Uses websockets to listen for incoming post events
+    Subscription: {
+        newPost: {
+            subscribe: (_, __, { pubsub }) => pubsub.asynIterator('NEW_POST')
         }
     }
 };
