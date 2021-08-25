@@ -5,12 +5,14 @@ const typeDefs = require('./graphql/typeDefs')
 const resolvers = require('./graphql/resolvers')
 const { MONGODB } = require('./config.js');
 
+// Initializes a new ApolloServer instance
 const server = new ApolloServer({
     typeDefs, 
     resolvers,
     context: ({ req }) => ({ req }) 
 });
 
+// Uses mongoose to connect the MongoDB instance to the Apollo server
 mongoose
     .connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true, dbName: "merng" })
     .then(() => {

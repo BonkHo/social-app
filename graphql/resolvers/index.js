@@ -1,5 +1,8 @@
-const postsResolvers = require('./post');
-const usersResolvers = require('./user');
+const postsResolvers = require('./posts');
+const usersResolvers = require('./users');
+const commentsResolvers = require('./comments');
+
+// Resolvers are a collection of functions that generate a response for GraphQL queries.
 
 module.exports = {
     Query: {
@@ -7,6 +10,7 @@ module.exports = {
     },
     Mutation: {
         ...usersResolvers.Mutation,
-        ...postsResolvers.Mutation
+        ...postsResolvers.Mutation,
+        ...commentsResolvers.Mutation
     }
 }
