@@ -35,22 +35,27 @@ module.exports = {
     Mutation: {
         // This function allows users to create a post with authentication
         async createPost(_, { body }, context) {
-        const user = checkAuth(context);
-        console.log(user);
-        const newPost = new Post({
-            body,
-            user: user.id,
-            username: user.username,
-            createdAt: new Date().toISOString()
-        });
+            const user = checkAuth(context);
 
-        const post = await newPost.save();
+            if (Post.body.trim() === '') {
+                throw new Error('Post body must not be empty');
+            }
+            
+            console.log(user);
+            const newPost = new Post({
+                body,
+                user: user.id,
+                username: user.username,
+                createdAt: new Date().toISOString()
+            });
 
-        context.pubsub.publish('NEW_POST', {
-            newPost: post
-        });
+            const post = await newPost.save();
 
-        return post;
+            context.pubsub.publish('NEW_POST', {
+                newPost: post
+            });
+
+            return post;
         },
         
         // This function allows a user to delete their own posts
