@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+// SUI Components
+import { Menu } from "semantic-ui-react";
 
 // This component was obtained from Semantic UI and is used as the NavBar for every single page
 // Semantic UI is similar to Material UI and Bootstrap
