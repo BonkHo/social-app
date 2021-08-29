@@ -2,39 +2,33 @@
 import { gql, useMutation } from "@apollo/client";
 // JSX & Hooks
 import React, { useState } from "react";
+import { useForm } from "../util/hooks";
 // SUI Components
 import { Button, Form } from "semantic-ui-react";
 
-const Register = () => {
+const Register = (props) => {
 	const [errors, setErrors] = useState({});
-	const [values, setValues] = useState({
+
+	const { onChange, onSubmit, values } = useForm(registerUser, {
 		username: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
 	});
 
-	const onChange = (e) => {
-		setValues({ ...values, [e.target.name]: e.target.value });
-	};
-
 	const [addUser, { loading }] = useMutation(REGISTER_USER, {
-		update(proxy, result) {
-			console.log(result);
+		update(_, result) {
+			props.history.push("/");
 		},
 		onError(err) {
-			// Statement checks to see if there is an error and if not it returns an empty object
-			console.log(err.graphQLErrors[0].extensions.exception.errors);
-			setErrors(err.graphQLErrors[0].extensions.exception.errors);
+			setErrors(err.graphQLErrors[0].extensions.errors);
 		},
 		variables: values,
 	});
 
-	const onSubmit = (e) => {
-		e.preventDefault();
+	function registerUser() {
 		addUser();
-	};
-
+	}
 	return (
 		<div className="form-container">
 			<Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
@@ -46,6 +40,7 @@ const Register = () => {
 					value={values.username}
 					onChange={onChange}
 					type="text"
+					error={errors.username ? true : false}
 				/>
 				<Form.Input
 					label="Email"
@@ -54,6 +49,7 @@ const Register = () => {
 					value={values.email}
 					onChange={onChange}
 					type="email"
+					error={errors.email ? true : false}
 				/>
 				<Form.Input
 					label="Password"
@@ -62,6 +58,7 @@ const Register = () => {
 					value={values.password}
 					onChange={onChange}
 					type="password"
+					error={errors.password ? true : false}
 				/>
 				<Form.Input
 					label="Confirm Password"
@@ -70,6 +67,7 @@ const Register = () => {
 					value={values.confirmPassword}
 					onChange={onChange}
 					type="password"
+					error={errors.confirmPassword ? true : false}
 				/>
 				<Button type="submit" primary>
 					Register
