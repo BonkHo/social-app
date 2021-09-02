@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/auth";
 // SUI Components
 import { Menu } from "semantic-ui-react";
 
@@ -9,6 +10,7 @@ import { Menu } from "semantic-ui-react";
 // Functional components use hooks instead of state variables, dont require render functions, and dont use the reference 'this'
 
 const MenuBar = () => {
+	const { user, logout } = useContext(AuthContext);
 	// Logic to figure out the active path
 	const pathName = window.location.pathname;
 	console.log(pathName);
@@ -20,7 +22,14 @@ const MenuBar = () => {
 	// Listens for onClick event to setActiveItem
 	const handleItemClick = (e, { name }) => setActiveItem(name);
 
-	return (
+	const menuBar = user ? (
+		<Menu pointing secondary size="massive" color="teal">
+			<Menu.Item name={user.username} active as={Link} to="/" />
+			<Menu.Menu position="right">
+				<Menu.Item name="logout" onClick={logout} />
+			</Menu.Menu>
+		</Menu>
+	) : (
 		<Menu pointing secondary size="massive" color="teal">
 			<Menu.Item
 				name="home"
@@ -47,6 +56,7 @@ const MenuBar = () => {
 			</Menu.Menu>
 		</Menu>
 	);
+	return menuBar;
 };
 
 export default MenuBar;
