@@ -24,7 +24,7 @@ const AuthContext = createContext({
 	logout: () => {},
 });
 
-// Reducer recieves an action with a type and a payload and decideds what to do
+// Reducer recieves an action with a type and a payload and decides what to do
 
 function authReducer(state, action) {
 	switch (action.type) {
