@@ -1,19 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 // The createdAt property is a ISOstring and the moment function .fromNow() will display how long ago the post was created
 import moment from "moment";
 // SUI components
 import { Card, Icon, Label, Image, Button } from "semantic-ui-react";
+// Import context for user
+import { AuthContext } from "../context/auth";
+// Import components
+import LikeButton from "./LikeButton.js";
 
 const PostCard = ({
 	post: { body, createdAt, id, username, likeCount, commentCount, likes },
 }) => {
-	function likePost() {
-		console.log("Like Post");
-	}
-	function commentPost() {
-		console.log("Comment Post");
-	}
+	const { user } = useContext(AuthContext);
 
 	return (
 		<Card fluid>
@@ -30,22 +29,25 @@ const PostCard = ({
 				<Card.Description>{body}</Card.Description>
 			</Card.Content>
 			<Card.Content extra>
-				<Button as="div" labelPosition="right" onClick={likePost}>
-					<Button color="red" basic>
-						<Icon name="heart" />
-					</Button>
-					<Label basic color="red" pointing="left">
-						{likeCount}
-					</Label>
-				</Button>
-				<Button as="div" labelPosition="right" onClick={commentPost}>
+				<LikeButton user={user} post={{ id, likes, likeCount }} />
+				<Button labelPosition="right" as={Link} to={`/posts/${id}`}>
 					<Button color="blue" basic>
 						<Icon name="comments" />
 					</Button>
 					<Label basic color="blue" pointing="left">
-						{likeCount}
+						{commentCount}
 					</Label>
 				</Button>
+				{user && user.username === username && (
+					<Button
+						as="div"
+						color="gray"
+						floated="right"
+						onClick={() => console.log("Delete post")}
+					>
+						<Icon name="trash" style={{ margin: 0 }} />
+					</Button>
+				)}
 			</Card.Content>
 		</Card>
 	);
