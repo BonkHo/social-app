@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { AuthContext } from "../context/auth";
 import moment from "moment";
@@ -9,13 +10,14 @@ import LikeButton from "../components/LikeButton";
 import DeleteButton from "../components/DeleteButton";
 
 const SinglePost = ({ props }) => {
-	const postId = props.match.params.postId;
+	const { postId } = useParams();
 	const { user } = useContext(AuthContext);
 	console.log(postId);
 
-	const {
-		data: { getPost },
-	} = useQuery(FETCH_POST_QUERY, { variables: { postId } });
+	const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
+		variables: { postId },
+	});
+	console.log(getPost);
 
 	let postMarkup;
 
@@ -50,7 +52,6 @@ const SinglePost = ({ props }) => {
 								<Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
 								<Card.Description>{body}</Card.Description>
 							</Card.Content>
-							<hr />
 							<Card.Content extra>
 								<LikeButton user={user} post={{ id, likes, likeCount }} />
 								<Button
@@ -64,8 +65,8 @@ const SinglePost = ({ props }) => {
 									<Label color="blue" pointing="left" basic>
 										{commentCount}
 									</Label>
-									{user && user.username === username && <DeleteButton postId={id} />}
 								</Button>
+								{user && user.username === username && <DeleteButton postId={id} />}
 							</Card.Content>
 						</Card>
 					</Grid.Column>
