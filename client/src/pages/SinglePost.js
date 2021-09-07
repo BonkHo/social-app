@@ -17,7 +17,10 @@ const SinglePost = ({ props }) => {
 	const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
 		variables: { postId },
 	});
-	console.log(getPost);
+
+	function deletePostCallback() {
+		props.history.push("/");
+	}
 
 	let postMarkup;
 
@@ -66,7 +69,9 @@ const SinglePost = ({ props }) => {
 										{commentCount}
 									</Label>
 								</Button>
-								{user && user.username === username && <DeleteButton postId={id} />}
+								{user && user.username === username && (
+									<DeleteButton postId={id} callback={deletePostCallback} />
+								)}
 							</Card.Content>
 						</Card>
 					</Grid.Column>
