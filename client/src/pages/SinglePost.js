@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
 import { gql, useQuery, useMutation } from "@apollo/client";
@@ -22,6 +22,7 @@ const SinglePost = ({ props }) => {
 	const [comment, setComment] = useState("");
 	const { postId } = useParams();
 	const { user } = useContext(AuthContext);
+	const commentInputRef = useRef(null);
 	console.log(postId);
 
 	const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
@@ -31,6 +32,7 @@ const SinglePost = ({ props }) => {
 	const [submitComment] = useMutation(SUBMIT_COMMENT_MUTATION, {
 		update() {
 			setComment("");
+			commentInputRef.current.blur();
 		},
 		variables: { postId, body: comment },
 	});
@@ -105,6 +107,7 @@ const SinglePost = ({ props }) => {
 												name="comment"
 												value={comment}
 												onChange={(event) => setComment(event.target.value)}
+												ref={commentInputRef}
 											/>
 											<button
 												type="submit"
