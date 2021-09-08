@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 // SUI Imports
-import { Button, Icon, Label } from "semantic-ui-react";
+import { Button, Icon, Label, Popup } from "semantic-ui-react";
 
 const LikeButton = ({ user, post: { id, likes, likeCount } }) => {
 	const [liked, setLiked] = useState(false);
@@ -34,12 +34,18 @@ const LikeButton = ({ user, post: { id, likes, likeCount } }) => {
 	);
 
 	return (
-		<Button as="div" labelPosition="right" onClick={likePost}>
-			{likeButton}
-			<Label basic color="red" pointing="left">
-				{likeCount}
-			</Label>
-		</Button>
+		<Popup
+			inverted
+			content={liked ? "Unlike" : "Like"}
+			trigger={
+				<Button as="div" labelPosition="right" onClick={likePost}>
+					{likeButton}
+					<Label basic color="red" pointing="left">
+						{likeCount}
+					</Label>
+				</Button>
+			}
+		/>
 	);
 };
 

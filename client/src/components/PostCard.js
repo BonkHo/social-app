@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // The createdAt property is a ISOstring and the moment function .fromNow() will display how long ago the post was created
 import moment from "moment";
 // SUI components
-import { Card, Icon, Label, Image, Button } from "semantic-ui-react";
+import { Card, Icon, Label, Image, Button, Popup } from "semantic-ui-react";
 // Import context for user
 import { AuthContext } from "../context/auth";
 // Import components
@@ -31,14 +31,21 @@ const PostCard = ({
 			</Card.Content>
 			<Card.Content extra>
 				<LikeButton user={user} post={{ id, likes, likeCount }} />
-				<Button labelPosition="right" as={Link} to={`/posts/${id}`}>
-					<Button color="blue" basic>
-						<Icon name="comments" />
-					</Button>
-					<Label basic color="blue" pointing="left">
-						{commentCount}
-					</Label>
-				</Button>
+				<Popup
+					inverted
+					content="Comment"
+					trigger={
+						<Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+							<Button color="blue" basic>
+								<Icon name="comments" />
+							</Button>
+							<Label basic color="blue" pointing="left">
+								{commentCount}
+							</Label>
+						</Button>
+					}
+				/>
+
 				{user && user.username === username && <DeleteButton postId={id} />}
 			</Card.Content>
 		</Card>
