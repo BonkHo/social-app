@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { AuthContext } from "../context/auth";
@@ -18,9 +19,11 @@ const SinglePost = ({ props }) => {
 		variables: { postId },
 	});
 
-	function deletePostCallback() {
-		props.history.push("/");
-	}
+	const history = useHistory();
+
+	const deletePostCallback = () => {
+		history.push("/");
+	};
 
 	let postMarkup;
 
